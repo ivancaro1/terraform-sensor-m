@@ -34,3 +34,4 @@ secrets*
 # Otros archivos temporales
 *.swp
 *.swo .terraform/
+bfg.jar
