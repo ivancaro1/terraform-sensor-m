@@ -33,4 +33,4 @@ secrets*
 
 # Otros archivos temporales
 *.swp
-*.swo 
+*.swo .terraform/
