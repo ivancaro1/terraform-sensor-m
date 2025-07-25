@@ -31,3 +31,37 @@ module "glue" {
   # Aquí puedes pasar variables necesarias, por ejemplo:
   # glue_database_name = var.glue_database_name
 }
+
+module "iot_rules" {
+  source = "./modules/iot_rule"
+  for_each = { for rule in var.iot_rules : rule.rule_name => rule }
+  rule_name      = each.value.rule_name
+  sql            = each.value.sql
+  s3_bucket_name = each.value.s3_bucket_name
+  s3_key         = each.value.s3_key
+  s3_canned_acl  = lookup(each.value, "s3_canned_acl", "private")
+  role_arn       = each.value.role_arn
+}
+
+module "iot_device" {
+  source     = "./modules/iot_device"
+  for_each   = toset(var.iot_device_names)
+  thing_name = each.value
+  policy_document = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Connect",
+        "iot:Publish",
+        "iot:Subscribe",
+        "iot:Receive"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}

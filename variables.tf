@@ -27,3 +27,22 @@ variable "extra_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "iot_device_names" {
+  description = "Lista de nombres de dispositivos IoT (things) a crear o gestionar."
+  type        = list(string)
+  default     = []
+}
+
+variable "iot_rules" {
+  description = "Lista de reglas IoT a crear, cada una como un objeto con sus parámetros."
+  type = list(object({
+    rule_name      = string
+    sql            = string
+    s3_bucket_name = string
+    s3_key         = string
+    s3_canned_acl  = string
+    role_arn       = string
+  }))
+  default = []
+}
