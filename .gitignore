@@ -1,0 +1,36 @@
+# Archivos de estado de Terraform
+*.tfstate
+*.tfstate.*
+
+# Archivos de respaldo de Terraform
+*.backup
+
+# Archivos de variables sensibles
+*.tfvars
+*.tfvars.json
+
+# Directorio de trabajo de Terraform
+dot-terraform/
+.terraform/
+
+# Archivos de logs
+crash.log
+
+# Archivos de salida de comandos
+*.out
+
+# Archivos de configuración de AWS
+.aws/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de credenciales
+credentials*
+secrets*
+.env*
+
+# Otros archivos temporales
+*.swp
+*.swo 
