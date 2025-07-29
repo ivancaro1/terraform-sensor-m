@@ -13,6 +13,7 @@ variable "environment" {
 variable "aws_account_id" {
   description = "Número de cuenta de AWS."
   type        = string
+  default     = "782659268170"
 }
 
 variable "name_prefix" {
@@ -45,4 +46,51 @@ variable "iot_rules" {
     role_arn       = string
   }))
   default = []
+}
+
+variable "glue_jobs" {
+  description = "Mapa de jobs de Glue a crear, cada uno como un objeto con sus parámetros."
+  type = map(object({
+    name                     = string
+    role_arn                 = string
+    command_name             = string
+    command_script_location  = string
+    max_retries              = number
+    timeout                  = number
+    worker_type              = string
+    number_of_workers        = number
+    glue_version             = string
+    python_version           = string
+    tags                     = map(string)
+    default_arguments        = map(string)
+  }))
+  default = {}
+}
+
+variable "iam_roles" {
+  description = "Lista de roles de IAM a crear, cada uno como un objeto con sus parámetros."
+  type = list(object({
+    name                    = string
+    description            = string
+    assume_role_policy     = string
+    managed_policy_arns    = list(string)
+    inline_policies        = map(string)
+    tags                   = map(string)
+  }))
+  default = []
+}
+
+variable "glue_assets_bucket" {
+  description = "Bucket donde se almacenan los scripts y assets de Glue"
+  type        = string
+}
+
+variable "curated_sensordata_bucket" {
+  description = "Bucket donde se almacenan los datos procesados (curados)"
+  type        = string
+}
+
+variable "raw_sensordata_bucket" {
+  description = "Bucket donde se almacenan los datos sin procesar (raw)"
+  type        = string
 }

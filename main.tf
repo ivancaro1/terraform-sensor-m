@@ -26,12 +26,6 @@ module "s3" {
   }, var.extra_tags)
 }
 
-module "glue" {
-  source = "./modules/glue"
-  # Aquí puedes pasar variables necesarias, por ejemplo:
-  # glue_database_name = var.glue_database_name
-}
-
 module "iot_rules" {
   source = "./modules/iot_rule"
   for_each = { for rule in var.iot_rules : rule.rule_name => rule }
@@ -41,6 +35,8 @@ module "iot_rules" {
   s3_key         = each.value.s3_key
   s3_canned_acl  = lookup(each.value, "s3_canned_acl", "private")
   role_arn       = each.value.role_arn
+  
+  depends_on = [module.iam]
 }
 
 module "iot_device" {
@@ -64,4 +60,30 @@ module "iot_device" {
   ]
 }
 EOF
+}
+
+module "iam" {
+  source = "./modules/iam"
+  
+  iam_roles = var.iam_roles
+  
+  default_tags = {
+    Environment = var.environment
+    Project     = var.name_prefix
+    Owner       = var.aws_account_id
+  }
+}
+
+
+module "glue" {
+  source      = "./modules/glue"
+
+  glue_jobs               = var.glue_jobs
+  environment             = var.environment
+  aws_region              = var.aws_region
+  glue_assets_bucket      = module.s3.glue_assets_bucket
+  curated_sensordata_bucket = module.s3.curated_sensordata_bucket
+  raw_sensordata_bucket   = module.s3.raw_sensordata_bucket
+
+  depends_on = [module.iam]
 }
