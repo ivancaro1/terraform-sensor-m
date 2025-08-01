@@ -44,23 +44,23 @@ module "iot_device" {
   for_each   = toset(var.iot_device_names)
   thing_name = each.value
   policy_document = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
     {
-      "Effect": "Allow",
-      "Action": [
-        "iot:Connect",
-        "iot:Publish",
-        "iot:Subscribe",
-        "iot:Receive"
-      ],
-      "Resource": "*"
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+        "Effect": "Allow",
+        "Action": [
+            "iot:Connect",
+            "iot:Publish",
+            "iot:Subscribe",
+            "iot:Receive"
+        ],
+        "Resource": "*"
+        }
+    ]
     }
-  ]
-}
-EOF
-}
+    EOF
+    }
 
 module "iam" {
   source = "./modules/iam"

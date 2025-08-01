@@ -63,6 +63,7 @@ variable "glue_jobs" {
     python_version           = string
     tags                     = map(string)
     default_arguments        = map(string)
+    schedule                 = string
   }))
   default = {}
 }

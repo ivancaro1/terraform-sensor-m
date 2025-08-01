@@ -39,3 +39,22 @@ resource "aws_glue_job" "this" {
     lookup(each.value, "default_arguments", {})
   )
 }
+
+resource "aws_glue_trigger" "scheduled" {
+  for_each = {
+    for job_key, job in var.glue_jobs :
+    "${job_key}-${var.environment}-${var.aws_region}" => job
+    if try(job.schedule != null && job.schedule != "", false)
+  }
+
+  name     = "${each.key}-trigger"
+  type     = "SCHEDULED"
+  schedule = each.value.schedule
+
+  actions {
+    job_name = each.key
+  }
+
+  start_on_creation = true
+  enabled           = true
+}
