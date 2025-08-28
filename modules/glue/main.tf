@@ -35,6 +35,8 @@ resource "aws_glue_job" "this" {
       "--TempDir"                      = "s3://${var.glue_assets_bucket}/temporary/"
       "--RAW_BUCKET"                   = var.raw_sensordata_bucket
       "--CURATED_BUCKET"               = var.curated_sensordata_bucket
+      "--input_bucket"                 = var.raw_sensordata_bucket
+      "--processed_bucket"             = var.curated_sensordata_bucket
     },
     lookup(each.value, "default_arguments", {})
   )
